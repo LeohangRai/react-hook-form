@@ -1,0 +1,42 @@
+# IMPORTANT NOTE:
+The form submit handler that we pass to the 'handleSubmit()' function only gets invoked after the form validation is successful, and it gets executed with the data object (form field values), so we don't have to worry about form validation within our submit handler. We just have to put in the logic for server interaction. We may also want to programmatically set errors on our form here if the server responds with some validation errors. We can do this by using the 'setError()' function exposed by react-hook-form.
+
+# The 'handleSubmit()' function
+This function will receive the form data if the form validation is successful.
+We make use of the 'handleSubmit' function from react hook form to pass it as the submit handler for our form. We are going to create our own form submission handler function but we are not going to directly pass it as the submit handler to our form. Instead, we are going to call our handler with the 'handleSubmit' function from react hook form and then pass it to our form. Our handler will be called by the 'handleSubmit' function with the data after validation has passed. This means, our submission handler function gets called only after the validation is successful.
+
+Like this:
+import { SubmitHandler, useForm } from 'react-hook-form';
+type OurFormFields = {
+  email: string;
+  password: string;
+};
+
+const {
+  register,
+  handleSubmit,
+  getValues,
+  reset,
+  formState: { errors, isSubmitting }
+} = useForm<FormFields>();
+
+// You can import the SubmitHandler type from 'react-hook-form'
+const ourSubmitHandler: SubmitHandler<OurFormFields> = (data) => {
+   console.log('data:', data);
+    // simulate network delay
+    await new Promise((resolve) => setTimeout(resolve, 2000)); // calling the server API maybe
+    console.log('Form submitted successfully!');
+    reset();
+}
+
+return (
+  <form onSubmit={handleSubmit(ourSubmitHandler)}>
+   // form fields go here
+  </form>
+)
+
+By doing this, what happens is, whenever our form gets submitted, the 'handleSubmit' function from 'react-hook-form' gets called, which will do some work behind the scenes for us. These are some of the things that it does BTS for us:
+
+- It will prevent the default behavior of the form (which means, we will not have to do a manual e.preventDefault() in our submit handler).
+- It will run all of the specified validations before actually calling the 'ourSubmitHandler' function that we have passed to it as an argument.
+- If all the validations get passed, it will call our 'ourSubmitHandler' function with the FormFields data object. (this object will contain all of the form fields that have been registered in our form)

@@ -1,0 +1,27 @@
+# Displaying form validation Errors
+React hook form provides an 'errors' object to show you the errors in the form.
+We can extract this 'errors' object from the 'formState' object provided by the react-hook-form. The 'formState' object is something exposed by react-hook-form, that contains information about the entire form state.
+
+# Example:
+const {
+  register,
+  handleSubmit,
+  formState: { errors }
+} = useForm<FormFields>();
+
+<input
+  type="text"
+  placeholder="Email"
+  {...register('email', {
+    required: 'Email is required',
+    validate: () => true,
+    pattern: {
+      value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+      message: 'Enter a valid email'
+    }
+  })}
+  className="px-4 py-2 rounded text-black"
+/>
+{errors.email && (
+  <div className="text-red-500">{errors.email.message}</div>
+)}

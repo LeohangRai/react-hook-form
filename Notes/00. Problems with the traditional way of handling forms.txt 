@@ -1,0 +1,10 @@
+# Problems with the traditional way of handling forms
+1. For every new field that you want to add, you have to add a new state property, you have to manage that field and manage its updates. You would have to then pass the state to the input, set the input's value as the state and also, manually two-way bind the input and the state. So if you had 10 input fields, you would have to repeat this thing 10 times.
+
+2. Also, every new field that you add, you have to remember to add it in the 'errors' object state (which handles/sets the error messages). And you would also have to make sure to reset the field during form submission.
+
+3. You would have to manually prevent the default behavior of the form submission. (e.preventDefault()).
+
+4. Furthermore, you would have to maintain a different state to manage whether the form is in the 'isSubmitting' state or not. You would set it to true during the form submission (during the API call), await the API call and then set it to false after successfully calling the API. We generally use this 'isSubmitting' state to conditionally disable the Submit button or to show some acknowledgement message to the user.
+
+5. You would also have to manage the form validations inside of your form submission handler function.

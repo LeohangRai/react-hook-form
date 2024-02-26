@@ -1,0 +1,32 @@
+# Handling form submission state (isSubmitting)
+React hook form exposes the 'isSubmitting' boolean value from the 'formState' object, that indicates whether the form is currently being submitted. You don't have to manage your own state to keep track of whether the form is in the submitting state or not.
+You can use the 'isSubmitting' boolean flag to conditionally disable your 'Submit' button or maybe display some information to the user.
+
+# Example:
+const {
+  register,
+  handleSubmit,
+  formState: { errors, isSubmitting }
+} = useForm<FormFields>();
+
+const ourSubmitHandler: SubmitHandler<FormFields> = async (data) => {
+  // call the API and do whatever
+};
+
+return (
+  <form
+    onSubmit={handleSubmit(ourSubmitHandler)}
+  >
+    /* 
+      bunch of input fields go here 
+    */
+  
+    <button
+      type="submit"
+      disabled={isSubmitting}
+      className="bg-blue-500 disabled:bg-gray-500 py-2 rounded"
+    >
+      Submit{isSubmitting ? 'ting...' : null}
+    </button>
+  </form>
+)

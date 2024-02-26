@@ -1,0 +1,27 @@
+# The 'register()' function
+The register() function allows us to register our component (input fields in this case) into the react-form-hook. This makes the value available for both 'form validation' and 'submission'.
+By calling the register() function and supplying an input name, we receive the following methods:
+
+1. onChange (ChangeHandler)
+- onChange prop to subscribe the input change event
+
+2. onBlur (ChangeHandler)
+- onBlur prop to subscribe the input blur event
+
+3. name (string)
+- input's name being registered
+
+We pass these methods as props to our input field by spreading the return of the register() function invokation.
+
+# IMPORTANT NOTE:
+So this is what happens when you invoke and de-structure the return of the 'register()' function in your input filed:
+<input {...register('email')} />
+
+IS EQUIVALENT TO:
+const { onChange, onBlur, name, ref } = register('email');
+<input 
+  onChange={onChange}
+  onBlur={onBlur}
+  name={name}
+  ref={ref}
+/>

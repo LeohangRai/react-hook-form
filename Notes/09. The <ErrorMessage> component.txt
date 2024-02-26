@@ -1,0 +1,47 @@
+# The ErrorMessage component
+React hook form also provides a simple component to render associated input's error message. It makes it easier to render our validation messages on the form.
+
+This component does not come pre-packed with react-hook-form, so you will have to additionally install this package:
+$ yarn add @hookform/error-message
+
+# Example usage:
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { ErrorMessage } from '@hookform/error-message';
+
+const {
+  register,
+  handleSubmit,
+  getValues,
+  reset,
+  formState: { errors, isSubmitting }
+} = useForm<FormFields>();
+
+// our custom function to specify how to render errors messages in the <ErrorMessage/> component
+const renderError = ({ message }: { message: string }) => (
+  <div className="text-red-500 max-w-[400px]">{message}</div>
+);
+
+return (
+  <form
+    onSubmit={handleSubmit(onSubmit)}
+  >
+    <input
+	 // input props	
+    />
+    <ErrorMessage name="email" errors={errors} render={renderError} />
+
+    <input
+      // input props
+    />
+    <ErrorMessage name="password" errors={errors} render={renderError} />
+
+    <input
+      // input props
+    />
+    <ErrorMessage
+      name="confirmPassword"
+      errors={errors}
+      render={renderError}
+    />
+  </form>
+);

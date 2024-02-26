@@ -1,0 +1,73 @@
+# Adding basic input field validations with react-hook-form
+The simplest way to validate an input using react-hook-form is by passing validation options to the 'register()' function provided by react-hook-form itself.
+The 'register()' takes in an optional second parameter, which can be an object with validation specifications for that input field.
+List of validation rules supported by React hook form:
+- required
+- min
+- max
+- minLength
+- maxLength
+- pattern
+- validate
+
+# Example:
+<input
+  type="text"
+  placeholder="Email"
+  {...register('email', {
+    required: 'Email is required',
+    pattern: {
+      value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+      message: 'Enter a valid email'
+    }
+  })}
+  className="px-4 py-2 rounded text-black"
+/>
+
+<input
+  type="password"
+  placeholder="Password"
+  {...register('password', {
+    required: 'Password is required',
+    minLength: {
+      value: 8,
+      message: 'Password must be at least 8 characters long'
+    },
+    validate: (value) => {
+      if (
+        !/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{1,}$/.test(value)
+      ) {
+        return 'Password must contain a lower case letter, an upper case letter and a number';
+      }
+      return true;
+    }
+  })}
+  className="px-4 py-2 rounded text-black"
+/>
+
+<input
+  type="password"
+  placeholder="Confirm password"
+  {...register('confirmPassword', {
+    required: 'Confirm password is required',
+    validate: (value) => {
+      if (value !== getValues('password')) {
+        return 'Password and Confirm password must match';
+      }
+      return true;
+    }
+  })}
+  className="px-4 py-2 rounded text-black"
+/>
+
+
+# IMPORTANT NOTE:
+It is also valid to do just a simple 'required: true' or pattern: /some-pattern/, but this won't specify any error message to be returned during validation failure. Instead, if you do 'required: 'This field is required', it will return the string as the error message whenever the validation fails.
+
+Also, in case of validation rules like 'minLength', you can do:
+minLength: {
+  value: 8,
+  message: 'This field must be at least 8 characters long'
+}
+Instead of:
+minLength: 8

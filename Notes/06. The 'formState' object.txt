@@ -1,0 +1,19 @@
+5. The 'formState' object
+This object contains information about the entire form state. It helps you keep track of the user's interaction with your form application.
+Some of the values included inside the 'formState' object are as follows:
+// I recommend checking out the docs to see what these values represent:
+https://react-hook-form.com/docs/useform/formstate
+
+- isDirty
+- dirtyFields
+- touchedFields
+- isSubmitted
+- isSubmitSuccessful
+- isSubmitting
+- isLoading
+- submitCount
+- isValid
+- isValidating
+- errors
+
+The ones that we are mostly concerned with are the 'isSubmitting' boolean flag and the 'errors' object.

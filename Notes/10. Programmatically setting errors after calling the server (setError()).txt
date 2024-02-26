@@ -1,0 +1,54 @@
+8. Programmatically setting errors after calling the Server (setError())
+The 'setError' function allows you to manually set one or more errors. This can come handy when you want to show errors to the user after the form has been submitted to the server and the server has responded with some validation errors (422 Unprocessable Entity).
+
+# Syntax:
+setError(name: string, error: FieldError, { shouldFocus?: boolean })
+
+# IMPORTANT NOTE
+If you want to set an error message for the whole form, instead of just a specific input field, you can set it to the 'root' field.
+
+# Example
+const DEFAULT_EMAIL = 'raileohang@gmail.com';
+const {
+  register,
+  handleSubmit,
+  reset,
+  setError,
+  formState: { errors, isSubmitting }
+} = useForm<RegistrationFormFields>({
+  resolver: zodResolver(registerSchema),
+  /* setting default values for the form input fields */
+  defaultValues: {
+    email: DEFAULT_EMAIL
+  }
+});
+
+const onSubmit: SubmitHandler<RegistrationFormFields> = async ({ email }) => {
+  try {
+    /* simulate server validation errors */
+    if (email === DEFAULT_EMAIL) {
+      throw new Error(
+        /* Be warned: Don't try this at home or office lol */
+        JSON.stringify({ path: 'email', message: 'Email already in use' })
+      );
+    }
+    if (email.endsWith('hotmail.com')) {
+      throw new Error(
+        /* Don't try this at home or office lol */
+        JSON.stringify({
+          path: 'root',
+          message: "Sorry! Hotmail ain't anymore!"
+        })
+      );
+    }
+    /* END server validation errors simulation */
+    console.log('Form submitted successfully!');
+    reset();
+  } catch (error: any) {
+    const { path, message } = JSON.parse(error.message);
+    /* manually setting errors for input field */
+    setError(path, {
+      message
+    });
+  }
+};

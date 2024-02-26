@@ -1,0 +1,27 @@
+# Passing a Type or Interface as Type Assertion to the useForm hook
+type OurFormFields = {
+  email: string;
+  password: string;
+};
+const { register, handleSubmit } = useForm<OurFormFields>();
+
+This makes sure that the functions, objects and properties returned by React hook form are properly typed according to the form fields that we have specified using our Type assertion.
+
+For instance:
+- Now if we use the 'register()' function in any of our form input fields, it will automatically suggest 'email' | 'password' and throw an error if we try to pass something other than 'email' or 'password'.
+
+- Also, now if we use the 'setError()' function provided by react-hook-form to programmatically set errors for our input fields, we will get suggestions for the argument that we may want to provide to the 'setError()' function as 'email' |'password'.
+
+These were just some of the many cases where the Type assertion comes handy during our use of the functions and properties exposed by the react-hook-form library.
+
+# IMPORTANT NOTE: 
+If you make use of Zod, you won't even have to define a FormFields type on your own. You can just infer a custom type from the Zod schema that you define for your form as:
+
+import { z } from 'zod';
+export const registerSchema = z
+  .object({
+    // structure registration schema
+  })
+
+// Inferring custom type from z.object()
+export type RegistrationFormFields = z.infer<typeof registerSchema>;

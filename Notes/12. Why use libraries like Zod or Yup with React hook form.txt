@@ -1,0 +1,33 @@
+# Why use libraries like Zod or Yup with React hook form
+1. it makes our validation schema a lot cleaner, readable and scalable
+2. we can make use of the same schema in both the client and the server for validation
+3. we can infer custom types from the z.object(), which we can use to Type assert our form fields (look at the example)
+4. we can centralize all of our validation logic in a central place, instead of having to write different validation logic for each input field in their respective 'register()' function
+
+# Example:
+import { z } from 'zod';
+export const registerSchema = z
+  .object({
+    email: z
+      .string({ required_error: 'Email is required' })
+      .min(1, { message: 'Email is required' })
+      .email({ message: 'Enter a valid email' }),
+    password: z
+      .string({ required_error: 'Password is required' })
+      .min(1, { message: 'Password is required' })
+      .min(8, 'Password must be at least 8 characters long')
+      .regex(
+        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).+$/,
+        'Password must contain a lower case letter, an upper case letter and a number'
+      ),
+    confirmPassword: z
+      .string({ required_error: 'Confirm Password is required' })
+      .min(1, { message: 'Confirm Password is required' })
+  })
+  .refine(({ password, confirmPassword }) => password === confirmPassword, {
+    message: 'Password and Confirm password must match',
+    path: ['confirmPassword']
+  });
+
+// Inferring custom type from z.object()
+export type RegistrationFormFields = z.infer<typeof registerSchema>;
