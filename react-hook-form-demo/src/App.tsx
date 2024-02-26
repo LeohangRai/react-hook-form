@@ -1,11 +1,10 @@
 import './App.css';
-import FormWithReactHookForm from './components/form-with-rhf';
+import FormWithReactHookFormAndErrorMsgComponent from './components/form-with-rhf-error-msg-component';
 
 function App() {
   return (
     <main className="flex min-h-screen min-w-[400px] flex-col items-center justify-between p-24">
-      {/* <FormWithoutReactHookForm /> */}
-      <FormWithReactHookForm />
+      <FormWithReactHookFormAndErrorMsgComponent />
     </main>
   );
 }
