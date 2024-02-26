@@ -1,0 +1,32 @@
+import { z } from 'zod';
+
+export const registerSchema = z
+  .object({
+    email: z
+      .string({ required_error: 'Email is required' })
+      .min(1, { message: 'Email is required' })
+      .email({ message: 'Enter a valid email' }),
+    password: z
+      .string({ required_error: 'Password is required' })
+      .min(1, { message: 'Password is required' })
+      .min(8, 'Password must be at least 8 characters long')
+      .regex(
+        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).+$/,
+        'Password must contain a lower case letter, an upper case letter and a number'
+      ),
+    confirmPassword: z
+      .string({ required_error: 'Confirm Password is required' })
+      .min(1, { message: 'Confirm Password is required' })
+  })
+  .refine(({ password, confirmPassword }) => password === confirmPassword, {
+    message: 'Password and Confirm password must match',
+    path: ['confirmPassword']
+  });
+
+export type RegistrationFormFields = z.infer<typeof registerSchema>;
+
+/* 
+NOTE:
+- z.string() accepts empty string, that is why I'm using the z.min(1) for checking that the field is not empty.
+- The reason why I'm leaving the 'required_error' option in z.string() is so that this schema is usable in the server.
+*/
